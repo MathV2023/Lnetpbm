@@ -13,12 +13,12 @@ function P3:new(name --[[str]], comments --[[str]], width --[[number]], height -
    end
    
    self = setmetatable({}, self)
-   self.name = (name .. '.ppm')
-   self.comments = comments
-   self.maxValue = maxValue -- max is 255
-   self.width = width
-   self.height = height
-   self.img = ''
+   self.name --[[str]] = (name .. '.ppm')
+   self.comments --[[str]] = comments
+   self.maxValue --[[number]] = maxValue -- max is 255
+   self.width --[[number]] = width
+   self.height --[[number]] = height
+   self.img --[[str]] = ''
 
    return self
 end
@@ -30,13 +30,16 @@ function P3:draw( mode --[[number: 0, 1 or 2]], ...)
    local add_width --[[number]] = width
    local size --[[number]] = (width * self.height)
    local three --[[number]] = 3
+   local is_correct --[[boolean]] = false
    
    for i, value in ipairs(args) do
+      is_correct = type(value) == 'number' and (value >= 0 and value <= 255)
+
       if i <= size then
-         if mode == 0 and type(value) == 'number' and (value >= 0 and value <= 255) then
+         if mode == 0 and is_correct then
             str = (i ~= size and (str .. tostring(value) .. ' ') or (str .. tostring(value)))
             
-         elseif mode == 1 and type(value) == 'number' and (value >= 0 and value <= 255) then
+         elseif mode == 1 and is_correct then
             
             if i ~= three then
                str = (str .. tostring(value) .. ' ')
@@ -47,7 +50,7 @@ function P3:draw( mode --[[number: 0, 1 or 2]], ...)
                str = (str .. tostring(value))
             end
             
-         elseif mode == 2 and type(value) == 'number' and (value >= 0 and value <= 255) then
+         elseif mode == 2 and is_correct then
             
             if i ~= width then
                str = (str .. tostring(value) .. ' ')
